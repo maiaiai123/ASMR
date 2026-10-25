@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ZEN ZONE | ASMR & Anti-Stress</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #e0e5ec;
+            --glass: rgba(255, 255, 255, 0.4);
+            --shadow-light: #ffffff;
+            --shadow-dark: #a3b1c6;
+            --accent: #a8e6cf;
+            --text: #4a4a4a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            overflow: hidden; /* Убираем скролл для погружения */
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Design */
+        header {
+            padding: 20px;
+            text-align: center;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            z-index: 10;
+        }
+
+        header h1 {
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+            text-transform: uppercase;
+        }
+
+        /* Main Container */
+        main {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Game Cards Selection */
+        .menu {
+            display: flex;
+            gap: 20px;
+            z-index: 5;
+        }
+
+        .card {
+            width: 150px;
+            height: 150px;
+            background: var(--bg-color);
+            border-radius: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 9px 9px 16px var(--shadow-dark), 
+                        -9px -9px 16px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .card:active {
+            box-shadow: inset 5px 5px 10px var(--shadow-dark), 
+                        inset -5px -5px 10px var(--shadow-light);
+            transform: scale(0.95);
+        }
+
+        .card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Game Screens */
+        .game-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+    .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        padding: 10px 20px;
+        border-radius: 20px;
+        background: var(--glass);
+        border: none;
+        box-shadow: 4px 4px 8px var(--shadow-dark);
+        cursor: pointer;
+        font-family: inherit;
+        z-index: 100;
+    }
+
+    /* GAME 1: SLIME */
+    #slime-game {
+        background: radial-gradient(circle, #ffdde1, #ee9ca7);
+        cursor: crosshair;
+    }
+
+    .slime-blob {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        backdrop-filter: blur(5px);
+        pointer-events: none;
+        animation: expand 1s ease-out forwards;
+    }
+
+    @keyframes expand {
+        0% { transform: scale(0); opacity: 1; }
+        100% { transform: scale(4); opacity: 0; }
+    }
+
+    /* GAME 2: POP IT */
+    #pop-game {
+        display: none;
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .pop-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        max-width: 350px;
+    }
+
+    .bubble {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--bg-color);
+        box-shadow: 6px 6px 12px var(--shadow-dark), 
+                    -6px -6px 12px var(--shadow-light);
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .bubble.popped {
+        box-shadow: inset 4px 4px 8px var(--shadow-dark), 
+                    inset -4px -4px 8px var(--shadow-light);
+        transform: scale(0.9);
+        background: rgba(0,0,0,0.05);
+    }
+
+</style>
+    // Random pastel color
+    const colors = ['#ffdde1', '#ee9ca7', '#a8e6cf', '#dcedc1', '#ffd3b6'];
+    blob.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+    slimeGame.appendChild(blob);
+
+    // Remove element after animation
+    setTimeout(() => {
+        blob.remove();
+    }, 1000);
+}
+
+// --- Pop It Logic ---
+function initPopIt() {
+    popGrid.innerHTML = ''; // Clear old bubbles
+    for (let i = 0; i < 16; i++) {
+        const bubble = document.createElement('div');
+        bubble.className = 'bubble';
+        bubble.addEventListener('pointerdown', () => {
+            if (!bubble.classList.contains('popped')) {
+                bubble.classList.add('popped');
+                playPopSound();
+            }
+        });
+        popGrid.appendChild(bubble);
+    }
+}
+
+// --- Audio Engine (Synthesized to avoid external files) ---
+function playPopSound() {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(400 + Math.random() * 200, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.1);
+}
+
+// Prevent zooming on mobile
+document.addEventListener('gesturestart', function (e) {
+    e.preventDefault();
+});
